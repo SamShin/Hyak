@@ -1,0 +1,9 @@
+Sample Size: 2000|Links Predicted: 964|Time Taken: 364.04|Precision: 0.995850622406639|Recall: 0.96|Linkage Pairs: 2821760
+
+Sample Size: 2000|Links Predicted: 964|Time Taken: 169.21|Precision: 0.995850622406639|Recall: 0.96|Linkage Pairs: 2821760|Parallelism: None
+Sample Size: 2000|Links Predicted: 964|Time Taken: 400.65|Precision: 0.995850622406639|Recall: 0.96|Linkage Pairs: 2821760|Parallelism: None
+Sample Size: 2000|Links Predicted: 964|Time Taken: 900.8|Precision: 0.995850622406639|Recall: 0.96|Linkage Pairs: 2821760|Parallelism: None
+Sample Size: 2000|Links Predicted: 964|Time Taken: 834.86|Precision: 0.995850622406639|Recall: 0.96|Linkage Pairs: 2821760|Parallelism: None
+Sample Size: 2000|Links Predicted: 964|Time Taken: 146.29|Precision: 0.995850622406639|Recall: 0.96|Linkage Pairs: 2821760|Parallelism: None
+Sample Size: 2000|Links Predicted: 964|Time Taken: 148.93|Precision: 0.995850622406639|Recall: 0.96|Linkage Pairs: 2821760|Parallelism: None
+Sample Size: 2000|Links Predicted: 964|Time Taken: 134.77|Precision: 0.995850622406639|Recall: 0.96|Linkage Pairs: 2821760|Parallelism: None

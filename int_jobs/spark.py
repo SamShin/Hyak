@@ -1,0 +1,137 @@
+# pylint: disable=E0401
+
+from pyspark import SparkContext, SparkConf
+from pyspark.sql import SparkSession
+from pyspark.sql import types
+
+import splink.spark.comparison_library as cl
+from splink.spark.jar_location import similarity_jar_location
+from splink.spark.linker import SparkLinker
+
+import logging
+import time
+import datetime
+import sys
+
+#Makes a spark Conf object
+conf = SparkConf()
+conf.setAppName("Splink Spark")
+# Adds the necessary jars for splink comparison to spark
+path = similarity_jar_location()
+conf.set("spark.jars", path)
+conf.set("spark.default.parallelism", "15")
+# Set the current spark conf and add it to the cluster alongside cluster set conf
+# Also set the temp dir
+sc = SparkContext.getOrCreate(conf=conf)
+spark = SparkSession(sc)
+spark.sparkContext.setCheckpointDir("/mmfs1/home/seunguk/spark/temp")
+
+# Supress log level
+# logs = ["splink.estimate_u", "splink.expectation_maximisation", "splink.settings", "splink.em_training_session", "comparison_level"]
+# for log in logs:
+#     logging.getLogger(log).setLevel(logging.ERROR)
+
+settings = {
+    "link_type": "link_only",
+    "unique_id_column_name": "id",
+    "comparisons": [
+        cl.levenshtein_at_thresholds(col_name="first_name", distance_threshold_or_thresholds=1, include_exact_match_level=False),
+        cl.levenshtein_at_thresholds(col_name="last_name", distance_threshold_or_thresholds=1, include_exact_match_level=False),
+        cl.levenshtein_at_thresholds(col_name="middle_name", distance_threshold_or_thresholds=1, include_exact_match_level=False),
+        cl.levenshtein_at_thresholds(col_name="res_street_address", distance_threshold_or_thresholds=1, include_exact_match_level=False),
+        cl.levenshtein_at_thresholds(col_name="birth_year", distance_threshold_or_thresholds=1, include_exact_match_level=False)
+    ],
+    # Blocking used here
+    "blocking_rules_to_generate_predictions": [
+    #    "l.zip_code = r.zip_code"
+        "substr(l.first_name,1,2) = substr(r.first_name,1,2)"
+    ]
+}
+
+path = "/mmfs1/home/seunguk/apptainer/test_files/test_df/"
+# TODO: Change here to fit desired levels
+lst = [2000,3000,4000,5000]
+for x in lst:
+    dfA = spark.read.csv(path + str(x) + "_dfA.csv", header = True)
+    dfB = spark.read.csv(path + str(x) + "_dfB.csv", header = True)
+
+    time_start = time.time()
+
+    # Creates the linker object used to compare dfA and dfB and
+    linker = SparkLinker([dfA, dfB], settings)
+    # linker.max_pairs(target_rows=1e6)
+    linker.estimate_u_using_random_sampling(max_pairs=1e8)
+    training = ["l.first_name = r.first_name",
+                "l.middle_name = r.middle_name",
+                "l.last_name = r.last_name",
+                "l.res_street_address = r.res_street_address",
+                "l.birth_year = r.birth_year"
+                ]
+
+    # Trainig the linker on predetermined training matches from above
+    for i in training:
+        linker.estimate_parameters_using_expectation_maximisation(i)
+    predict = linker.predict(0.5)
+
+    time_end = time.time()
+
+    # Transform into dataframe to calculate the accuracy
+    df_predict = predict.as_pandas_dataframe()
+
+    # Total number of comparisons from the given blocking rule
+    # pairs = linker.count_num_comparisons_from_blocking_rule("l.zip_code = r.zip_code")
+    # TODO
+    pairs = linker.count_num_comparisons_from_blocking_rule("substr(l.first_name,1,2) = substr(r.first_name,1,2)")
+
+    false_positive = len(df_predict.loc[df_predict["id_l"] != df_predict["id_r"]])
+    true_positive = len(df_predict.loc[df_predict["id_l"] == df_predict["id_r"]])
+    false_negative = round(x / 2) - true_positive
+
+    precision = true_positive / (true_positive + false_positive)
+    recall = true_positive / (true_positive + false_negative)
+
+    # Debug data of Spark Cluster
+    worker_cores = None
+    worker_memory = None
+    worker_count = None
+
+    # Read the cluster conf from the spark-env.sh file
+    content = None
+    with open("/mmfs1/home/seunguk/spark/conf/spark-env.sh", "r") as f:
+        content = f.read()
+
+    lines = content.split("\n")
+
+    for line in lines:
+        if line.startswith('export SPARK_WORKER_CORES='):
+            worker_cores = line.split('=')[1]
+        elif line.startswith('export SPARK_WORKER_MEMORY='):
+            worker_memory = line.split('=')[1]
+
+    # Read the number of cores from the nodes.txt file
+    with open("/mmfs1/home/seunguk/int_jobs/nodes.txt", "r") as f:
+        lines = f.readlines()
+
+    # -1 since the last core is dedicated as client
+    worker_count = len(lines) - 2
+
+    now = datetime.datetime.now()
+
+    # Print out the output
+    with open("/mmfs1/home/seunguk/int_jobs/spark.txt", "a") as f:
+        f.writelines(
+            "Sample Size: " + str(x) +
+            "|Links Predicted: " + str(len(df_predict)) +
+            "|Time Taken: " + str(round((time_end - time_start),2)) +
+            "|Precision: " + str(precision) +
+            "|Recall: " + str(recall) +
+            "|Linkage Pairs: " + str(pairs) +
+            "|Finish Time: " + str(now) +
+            "|Worker Count: " + str(worker_count) +
+            "|Cores per Worker: " + str(worker_cores) +
+            "|Memory per Worker: " + str(worker_memory) +
+            "\n"
+        )
+
+sc.stop()
+spark.stop()

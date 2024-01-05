@@ -1,0 +1,5 @@
+Sample Size: 2000|Links Predicted: 820|Time Taken: 147.61|Precision: 0.9963414634146341|Recall: 0.817|Linkage Pairs: 2821760|Finish Time: 2023-12-05 13:08:45.318476|Worker Count: 3|Cores per Worker: 20|Memory per Worker: 10g
+Sample Size: 2000|Links Predicted: 820|Time Taken: 142.15|Precision: 0.9963414634146341|Recall: 0.817|Linkage Pairs: 2821760|Finish Time: 2023-12-05 13:37:46.982589|Worker Count: 3|Cores per Worker: 20|Memory per Worker: 10g
+d
+Sample Size: 2000|Links Predicted: 820|Time Taken: 162.56|Precision: 0.9963414634146341|Recall: 0.817|Linkage Pairs: 2821760|Finish Time: 2023-12-05 14:30:42.707110|Worker Count: 1|Cores per Worker: 15|Memory per Worker: 7g
+Sample Size: 2000|Links Predicted: 820|Time Taken: 169.28|Precision: 0.9963414634146341|Recall: 0.817|Linkage Pairs: 2821760|Finish Time: 2023-12-06 17:29:15.472409|Worker Count: 1|Cores per Worker: 15|Memory per Worker: 7g

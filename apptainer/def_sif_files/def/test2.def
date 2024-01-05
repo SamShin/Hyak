@@ -1,0 +1,7 @@
+Bootstrap: docker
+From: ubuntu:22.04
+
+%runscript
+
+	# "/spark/spark-3.4.0-bin-hadoop3/sbin/start-worker.sh $1"
+	bash /mmfs1/home/seunguk/test/test.sh
