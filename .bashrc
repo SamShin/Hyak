@@ -31,4 +31,8 @@ alias ls='ls --color'
 alias meminfo='free -h'
 alias cpuinfo='lscpu'
 
+alias tm_list='tmux list-sessions'
+alias tm_conn='tmux attach -t'
+alias tm_rm='tmux kill-session -t'
+alias tm_rename='rename-session'
 alias c='clear'

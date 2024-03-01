@@ -1,0 +1,10 @@
+Sample Size: 2000|Links Predicted: 1001|Time Taken: 34.29|Precision: 0.996003996003996|Recall: 0.997|Linkage Pairs: 2821760
+Sample Size: 4000|Links Predicted: 2005|Time Taken: 223.91|Precision: 0.9930174563591022|Recall: 0.9955|Linkage Pairs: 11067620
+Sample Size: 2000|Links Predicted: 1000|Time Taken: 58.94|Precision: 0.997|Recall: 0.997|Linkage Pairs: 2821760
+Sample Size: 4000|Links Predicted: 2004|Time Taken: 224.92|Precision: 0.9915169660678643|Recall: 0.9935|Linkage Pairs: 11067620
+Sample Size: 100000|Links Predicted: 54856|Time Taken: 13386.83|Precision: 0.9077220358757474|Recall: 0.99588|Linkage Pairs: 642628542
+Sample Size: 100000|Links Predicted: 54956|Time Taken: 14222.47|Precision: 0.9060885071693718|Recall: 0.9959|Linkage Pairs: 642628542
+
+Sample Size: 100_000|Links Predicted: 50_035|Total Time Taken: 465.44|Estimate Parameters Time Taken: 443.75|Predict Time Taken: 21.67|Dataframe Convergence Time Taken: 0.02|Precision: 0.9859|Recall: 0.9866|Linkage Pairs: 1_431_053, 54_224, 47_284|Salting Partition: 4|Finish Time: 2024-02-25 04:19:29.400996
+Sample Size: 250_000|Links Predicted: 129_401|Total Time Taken: 4_737.95|Estimate Parameters Time Taken: 4_635.46|Predict Time Taken: 102.44|Dataframe Convergence Time Taken: 0.06|Precision: 0.9524|Recall: 0.986|Linkage Pairs: 8_825_403, 217_155, 144_259|Salting Partition: 4|Finish Time: 2024-02-25 05:38:32.531212
+Sample Size: 500_000|Links Predicted: 558_527|Total Time Taken: 23_757.74|Estimate Parameters Time Taken: 23_262.95|Predict Time Taken: 494.34|Dataframe Convergence Time Taken: 0.45|Precision: 0.4379|Recall: 0.9784|Linkage Pairs: 35_243_345, 707_619, 366_877|Salting Partition: 4|Finish Time: 2024-02-25 12:15:05.870021

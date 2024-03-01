@@ -8,7 +8,11 @@ import time
 #
 # * You must be currently in the master node when starting this program
 # * This code will be executed insde apptainer with the following command
-#       apptainer shell --bind /mmfs1/home/seunguk/spark/work:/spark/spark-3.4.0-bin-hadoop3/work,/mmfs1/home/seunguk/spark/conf:/spark/spark-3.4.0-bin-hadoop3/conf python.sif
+"""
+apptainer shell --bind /gscratch:/gscratch,/mmfs1/home/seunguk/spark/work:/spark/spark-3.4.0-bin-hadoop3/work,/mmfs1/home/seunguk/spark/conf:/spark/spark-3.4.0-bin-hadoop3/conf /mmfs1/home/seunguk/apptainer/def_sif_files/python.sif
+apptainer shell --bind /mmfs1/home/seunguk/spark/work:/spark/spark-3.4.0-bin-hadoop3/work,/mmfs1/home/seunguk/spark/conf:/spark/spark-3.4.0-bin-hadoop3/conf /mmfs1/home/seunguk/apptainer/def_sif_files/python.sif
+
+"""
 # * First node in nodes.txt is the master node
 
 # Paths
@@ -25,8 +29,8 @@ SPARK_LOG_DIR = "/mmfs1/home/seunguk/spark/logs"
 SPARK_CONF_DIR = "/mmfs1/home/seunguk/spark/conf"
 APPTAINER_DIR = "/mmfs1/home/seunguk/apptainer/def_sif_files/python.sif"
 
-CORE_COUNT = 15
-CORE_MEMORY = "7g"
+CORE_COUNT = 1
+CORE_MEMORY = "50g"
 PORT_NUMBER = 7077
 
 # Get the allocated nodes in nodes.tx
@@ -53,7 +57,7 @@ with open("/mmfs1/home/seunguk/spark/conf/spark-env.sh", "w") as f:
     f.write("export SPARK_LOG_DIR=" + SPARK_LOG_DIR + "\n")
     # f.write("export SPARK_WORK_DIR=" + SPARK_WORK_DIR + "\n")
     f.write("export SPARK_MASTER_PORT=" + str(PORT_NUMBER) + "\n")
-
+    # f.write("export SPARK_HOME=/gscratch/stf/seunguk/spark-3.5.0-bin-hadoop3" + "\n") # TODO: Spark installation outside of apptainer
 
 # Starts the Spark master on the master node
 start_master_command = "/spark/spark-3.4.0-bin-hadoop3/sbin/start-master.sh; sleep 2"
@@ -69,7 +73,7 @@ for node in nodes[1:-1]:
     worker.set_missing_host_key_policy(paramiko.AutoAddPolicy())
     worker.load_system_host_keys(KNOWN_HOST_DIR)
     worker.connect(node)
-    start_worker_command = f"apptainer exec --cleanenv --bind {SPARK_WORK_DIR}:/spark/spark-3.4.0-bin-hadoop3/work,{SPARK_CONF_DIR}:/spark/spark-3.4.0-bin-hadoop3/conf {APPTAINER_DIR} bash -c \"/spark/spark-3.4.0-bin-hadoop3/sbin/start-worker.sh spark://{nodes[0]}:7077; sleep 2 \""
+    start_worker_command = f"apptainer exec --bind /gscratch:/gscratch,{SPARK_WORK_DIR}:/spark/spark-3.4.0-bin-hadoop3/work,{SPARK_CONF_DIR}:/spark/spark-3.4.0-bin-hadoop3/conf {APPTAINER_DIR} bash -c \"/spark/spark-3.4.0-bin-hadoop3/sbin/start-worker.sh spark://{nodes[0]}:7077; sleep 2 \""
 
     stdin, stdout, stderr = worker.exec_command(start_worker_command)
     stdin.close()
@@ -89,7 +93,7 @@ client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
 client.load_system_host_keys(KNOWN_HOST_DIR)
 client.connect(nodes[-1])
 
-client_command = f"apptainer exec {APPTAINER_DIR} bash /mmfs1/home/seunguk/int_jobs/submit.sh; sleep 2"
+client_command = f"apptainer exec --bind /gscratch:/gscratch,{SPARK_WORK_DIR}:/spark/spark-3.4.0-bin-hadoop3/work,{SPARK_CONF_DIR}:/spark/spark-3.4.0-bin-hadoop3/conf {APPTAINER_DIR} bash /mmfs1/home/seunguk/int_jobs/submit.sh; sleep 2"
 stdin_, stdout_, stderr_ = client.exec_command(client_command)
 
 # Prints at least a part of the output without hanging
@@ -113,25 +117,26 @@ print("started\n")
 client.close()
 
 
+
+# Change this value depending on how many runs are in spark.py
+test_case_count = 3
+
 original_file_line = None
-test_case_count = 4
 
-
+# Reads how many lines the original output file has
 with open("/mmfs1/home/seunguk/int_jobs/spark.txt", "r") as f:
     original_file_line = sum(1 for line in f)
+    print(f"Original_file_line: {original_file_line}\n\n")
 
-
+# Checks how many lines the current output file has
 def check_file():
     with open("/mmfs1/home/seunguk/int_jobs/spark.txt", "r") as file:
         line_count = sum(1 for line in file)
-
+        print(f"Current_file_line: {line_count}\n")
 
         return line_count == original_file_line + test_case_count
 
 while not check_file():
-    time.sleep(5)
+    time.sleep(10)
 
 print("done")
-# TODO:
-# Keep this program open with while loop until the spark.py program writes to a file and check if something is
-# written to a file and then check how many lines it has

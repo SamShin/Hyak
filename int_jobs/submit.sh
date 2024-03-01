@@ -1,1 +1,1 @@
-/spark/spark-3.4.0-bin-hadoop3/bin/spark-submit /mmfs1/home/seunguk/int_jobs/spark.py --master spark://n3388:7077
+/spark/spark-3.4.0-bin-hadoop3/bin/spark-submit /mmfs1/home/seunguk/int_jobs/spark.py --master spark://n3240:7077

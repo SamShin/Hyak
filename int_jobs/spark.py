@@ -19,12 +19,22 @@ conf.setAppName("Splink Spark")
 # Adds the necessary jars for splink comparison to spark
 path = similarity_jar_location()
 conf.set("spark.jars", path)
-conf.set("spark.default.parallelism", "15")
+
+
+conf.set("spark.default.parallelism", "10") # HACK: Change from 5 to 1
+# conf.set("spark.memory.fraction", "0.6") # Changing from 0.6 to 0.8 causes error
+# conf.set("spark.executor.memory", "30g")
+# conf.set("spark.driver.memory", "10g")
+
+
 # Set the current spark conf and add it to the cluster alongside cluster set conf
+
 # Also set the temp dir
 sc = SparkContext.getOrCreate(conf=conf)
 spark = SparkSession(sc)
-spark.sparkContext.setCheckpointDir("/mmfs1/home/seunguk/spark/temp")
+# spark.sparkContext.setCheckpointDir("/mmfs1/home/seunguk/spark/temp")
+# HACK: Testing new temp folder
+spark.sparkContext.setCheckpointDir("/gscratch/stf/seunguk/spark_temp")
 
 # Supress log level
 # logs = ["splink.estimate_u", "splink.expectation_maximisation", "splink.settings", "splink.em_training_session", "comparison_level"]
@@ -43,17 +53,17 @@ settings = {
     ],
     # Blocking used here
     "blocking_rules_to_generate_predictions": [
-    #    "l.zip_code = r.zip_code"
-        "substr(l.first_name,1,2) = substr(r.first_name,1,2)"
-    ]
+        "substr(l.first_name,1,1) = substr(r.first_name,1,1) and substr(l.last_name,1,2) = substr(r.last_name,1,2) and l.zip_code = r.zip_code"
+        ]
 }
 
-path = "/mmfs1/home/seunguk/apptainer/test_files/test_df/"
+path = "/mmfs1/home/seunguk/big_df/"
+path_big = "/gscratch/stf/seunguk/big_df/"
 # TODO: Change here to fit desired levels
-lst = [2000,3000,4000,5000]
+lst = [250000, 250000, 250000]
 for x in lst:
-    dfA = spark.read.csv(path + str(x) + "_dfA.csv", header = True)
-    dfB = spark.read.csv(path + str(x) + "_dfB.csv", header = True)
+    dfA = spark.read.csv(path_big + str(x) + "_dfA.csv", header = True)
+    dfB = spark.read.csv(path_big + str(x) + "_dfB.csv", header = True)
 
     time_start = time.time()
 
@@ -81,7 +91,7 @@ for x in lst:
     # Total number of comparisons from the given blocking rule
     # pairs = linker.count_num_comparisons_from_blocking_rule("l.zip_code = r.zip_code")
     # TODO
-    pairs = linker.count_num_comparisons_from_blocking_rule("substr(l.first_name,1,2) = substr(r.first_name,1,2)")
+    pairs = linker.count_num_comparisons_from_blocking_rule("substr(l.first_name,1,1) = substr(r.first_name,1,1) and substr(l.last_name,1,2) = substr(r.last_name,1,2) and l.zip_code = r.zip_code")
 
     false_positive = len(df_predict.loc[df_predict["id_l"] != df_predict["id_r"]])
     true_positive = len(df_predict.loc[df_predict["id_l"] == df_predict["id_r"]])
@@ -120,13 +130,14 @@ for x in lst:
     # Print out the output
     with open("/mmfs1/home/seunguk/int_jobs/spark.txt", "a") as f:
         f.writelines(
-            "Sample Size: " + str(x) +
-            "|Links Predicted: " + str(len(df_predict)) +
-            "|Time Taken: " + str(round((time_end - time_start),2)) +
-            "|Precision: " + str(precision) +
-            "|Recall: " + str(recall) +
-            "|Linkage Pairs: " + str(pairs) +
+            "Sample Size: " + str(f"{x:_}") +
+            "|Links Predicted: " + str(f"{len(df_predict):_}") +
+            "|Time Taken: " + str(f"{round((time_end - time_start),2):_}") +
+            "|Precision: " + str(round(precision, 4)) +
+            "|Recall: " + str(round(recall,4)) +
+            "|Linkage Pairs: " + str(f"{pairs:_}") +
             "|Finish Time: " + str(now) +
+            "|Blocking rules: "+ str(settings["blocking_rules_to_generate_predictions"]) +
             "|Worker Count: " + str(worker_count) +
             "|Cores per Worker: " + str(worker_cores) +
             "|Memory per Worker: " + str(worker_memory) +
