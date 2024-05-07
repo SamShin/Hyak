@@ -1,0 +1,5 @@
+Sample Size: 4_000|Links Predicted: 1_349|Total Time Taken: 0.77|Estimate Parameters Time Taken: 0.63|Predict Time Taken: 0.15|Precision: 0.9778|Recall: 0.6595|Finish Time: 2024-04-02 02:50:23.438505
+Sample Size: 4_000|Links Predicted: 1_353|Total Time Taken: 1.02|Estimate Parameters Time Taken: 0.71|Predict Time Taken: 0.32|Precision: 0.9749|Recall: 0.6595|Finish Time: 2024-04-02 02:50:40.272050
+Sample Size: 4_000|Links Predicted: 1_350|Total Time Taken: 1.11|Estimate Parameters Time Taken: 0.77|Predict Time Taken: 0.34|Precision: 0.9778|Recall: 0.66|Finish Time: 2024-04-02 02:51:14.877623
+Sample Size: 10_000|Links Predicted: 5_001|Total Time Taken: 522.4|Estimate Parameters Time Taken: 4.22|Predict Time Taken: 518.17|Precision: 0.9998|Recall: 1.0|Linkage Pairs: 6_602, 4_875, 20_444 7_596 4_798|Finish Time: 2024-04-02 03:11:06.282613
+Sample Size: 10_000|Links Predicted: 5_001|Total Time Taken: 499.5|Estimate Parameters Time Taken: 3.8|Predict Time Taken: 495.69|Precision: 0.9998|Recall: 1.0|Linkage Pairs: 6_602, 4_875, 20_444 7_596 4_798|Finish Time: 2024-04-02 05:11:45.850740

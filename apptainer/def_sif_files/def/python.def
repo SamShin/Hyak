@@ -5,12 +5,17 @@ From: ubuntu:22.04
 	export DEBIAN_FRONTEND=noninteractive
 
 	# Necessary downloads
+	# apt-get install -y slurm-wlm
+
 	apt-get -y update
-	apt-get install -y slurm-wlm
 	apt-get install -y python3-pip
 	apt-get install -y openjdk-17-jdk
 	apt-get install -y wget
-	apt-get install -y tmux
+	apt-get install -y openssh-client
+	apt-get install -y openssh-server
+	apt-get install -y vim
+	# apt-get install -y tmux
+	# apt-get install -y git
 
 	mkdir spark && cd spark
 	wget https://archive.apache.org/dist/spark/spark-3.4.0/spark-3.4.0-bin-hadoop3.tgz
@@ -25,18 +30,22 @@ From: ubuntu:22.04
 	pip3 install pyspark
 	pip3 install splink['all']
 	pip3 install splink['spark']
-	pip3 install psutil
-	pip3 install pseudopeople
-	pip3 install pandas==2.0.3
-	pip3 install requests
+	# pip3 install psutil
+	# pip3 install pseudopeople
+	# pip install git+https://github.com/ihmeuw/pseudopeople.git@feature/dask
+	# pip3 install pandas==2.0.3
+	pip3 install pandas
+	# pip3 install dask
+
+	# pip3 install requests
 
 	# Additional tools
-	apt-get install -y vim
-	apt-get install -y w3m
-	apt-get install -y w3m-img
+	# apt-get install -y git
+	# apt-get install -y vim
+	# apt-get install -y w3m
+	# apt-get install -y w3m-img
 
-	apt-get install -y openssh-client
-	apt-get install -y openssh-server
+
 
 
 

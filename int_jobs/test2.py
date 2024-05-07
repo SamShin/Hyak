@@ -8,20 +8,20 @@ from splink.duckdb.linker import DuckDBLinker
 from splink.duckdb.blocking_rule_library import block_on
 
 settings = {"link_type": "link_only",
-            "unique_id_column_name": "id",}
+            "unique_id_column_name": "simulant_id",}
 
-path = "/mmfs1/home/seunguk/big_df/"
+path = "/gscratch/stf/seunguk/pseudo_df/usa/"
 path_big = "/gscratch/stf/seunguk/recordlinkage/big_df/"
 
-block2 = "l.zip_code = r.zip_code"
-block3 = "l.first_name = r.first_name"
-block = "substr(l.first_name,1,2) = substr(r.first_name,1,2)"
-block4 = "substr(l.first_name,1,1) = substr(r.first_name,1,1) and substr(l.last_name,1,2) = substr(r.last_name,1,2) and l.zip_code = r.zip_code"
+
+block4 = block_on(["first_name", "middle_initial", "last_name", "street_name"])
+block = block_on(["zipcode", "date_of_birth", "city", "state"])
+block2 = block_on(["first_name", "middle_initial"])
 # dfA = pd.read_csv(path + "1000000_dfA.csv")
 # dfB = pd.read_csv(path + "1000000_dfB.csv")
-
-dfA = pd.read_csv(path + "100000_dfA.csv")
-dfB = pd.read_csv(path + "100000_dfB.csv")
+total = [block, block4]
+dfA = pd.read_csv(path + "2000000_dfA.csv")
+dfB = pd.read_csv(path + "2000000_dfB.csv")
 
 linker = DuckDBLinker([dfA, dfB], settings)
 count = linker.count_num_comparisons_from_blocking_rule(block4)

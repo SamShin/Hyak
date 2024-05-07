@@ -4,4 +4,10 @@ From: ubuntu:22.04
 %post
 
 	apt-get -y update
-	apt-get install -y htop
+	apt-get -y install vim
+
+	#source /mmfs1/home/seunguk/.bashrc
+	#wget https://dlcdn.apache.org/spark/spark-3.5.1/spark-3.5.1-bin-hadoop3.tgza
+
+%runscript
+	source /mmfs1/home/seunguk/.bashrc && /bin/bash	

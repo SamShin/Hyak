@@ -70,7 +70,7 @@ for x in lst:
     # Creates the linker object used to compare dfA and dfB and
     linker = SparkLinker([dfA, dfB], settings)
     # linker.max_pairs(target_rows=1e6)
-    linker.estimate_u_using_random_sampling(max_pairs=1e8)
+    linker.estimate_u_using_random_sampling(max_pairs=1e7)
     training = ["l.first_name = r.first_name",
                 "l.middle_name = r.middle_name",
                 "l.last_name = r.last_name",

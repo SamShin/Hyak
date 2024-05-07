@@ -9,7 +9,7 @@ import time
 # * You must be currently in the master node when starting this program
 # * This code will be executed insde apptainer with the following command
 """
-apptainer shell --bind /gscratch:/gscratch,/mmfs1/home/seunguk/spark/work:/spark/spark-3.4.0-bin-hadoop3/work,/mmfs1/home/seunguk/spark/conf:/spark/spark-3.4.0-bin-hadoop3/conf /mmfs1/home/seunguk/apptainer/def_sif_files/python.sif
+apptainer shell --bind /gscratch:/gscratch,/mmfs1/home/seunguk/spark/work:/spark/spark-3.4.0-bin-hadoop3/work,/mmfs1/home/seunguk/spark/conf:/spark/spark-3.4.0-bin-hadoop3/conf /gscratch/stf/seunguk/spark.sif
 apptainer shell --bind /mmfs1/home/seunguk/spark/work:/spark/spark-3.4.0-bin-hadoop3/work,/mmfs1/home/seunguk/spark/conf:/spark/spark-3.4.0-bin-hadoop3/conf /mmfs1/home/seunguk/apptainer/def_sif_files/python.sif
 
 """
@@ -27,7 +27,7 @@ KNOWN_HOST_DIR = "/mmfs1/home/seunguk/.ssh/known_hosts"
 SPARK_WORK_DIR = "/mmfs1/home/seunguk/spark/work"
 SPARK_LOG_DIR = "/mmfs1/home/seunguk/spark/logs"
 SPARK_CONF_DIR = "/mmfs1/home/seunguk/spark/conf"
-APPTAINER_DIR = "/mmfs1/home/seunguk/apptainer/def_sif_files/python.sif"
+APPTAINER_DIR = "/gscratch/stf/seunguk/spark.sif"
 
 CORE_COUNT = 1
 CORE_MEMORY = "50g"
@@ -69,6 +69,7 @@ print("\n")
 
 # Connect to each worker node and start Spark worker in each of them
 for node in nodes[1:-1]:
+    print(f"worker {node}")
     worker = paramiko.SSHClient()
     worker.set_missing_host_key_policy(paramiko.AutoAddPolicy())
     worker.load_system_host_keys(KNOWN_HOST_DIR)
@@ -119,7 +120,7 @@ client.close()
 
 
 # Change this value depending on how many runs are in spark.py
-test_case_count = 3
+test_case_count = 1
 
 original_file_line = None
 
