@@ -6,16 +6,13 @@ SPARK_HOME=/spark/spark-3.4.0-bin-hadoop3
 # Set the path to your Python Spark application script
 PY_SCRIPT=/mmfs1/home/seunguk/int_jobs/spark.py
 # Set the master URL for your Spark cluster (e.g., "spark://your-master-node:7077" for a standalone cluster)
-MASTER_URL=spark://n3000:7077
-
-# Set the number of executor instances
-NUM_EXECUTORS=4
+MASTER_URL=spark://n3002:7077
 
 # Set the number of cores per executor
 CORES_PER_EXECUTOR=5
 
 # Set the amount of memory per executor
-EXECUTOR_MEMORY=160g
+EXECUTOR_MEMORY=25g
 
 # Set the driver memory
 DRIVER_MEMORY=3g
@@ -31,7 +28,6 @@ VERBOSE_MODE="--verbose"
 ${SPARK_HOME}/bin/spark-submit \
   --master ${MASTER_URL} \
   --deploy-mode client \
-  --num-executors ${NUM_EXECUTORS} \
   --executor-cores ${CORES_PER_EXECUTOR} \
   --executor-memory ${EXECUTOR_MEMORY} \
   --driver-memory ${DRIVER_MEMORY} \

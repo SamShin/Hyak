@@ -1,1 +1,2 @@
 /gscratch/stf/seunguk/miniconda3
+/gscratch/stf/seunguk/miniconda3/envs/link

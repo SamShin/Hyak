@@ -1,0 +1,18 @@
+{
+  "job_name": "sys/dashboard/sys/bc_desktop/klone",
+  "workdir": "/mmfs1/home/seunguk/ondemand/data/sys/dashboard/batch_connect/sys/bc_desktop/klone/output/1ab44173-1dc5-4f1a-897f-f252cd0a9878",
+  "output_path": "/mmfs1/home/seunguk/ondemand/data/sys/dashboard/batch_connect/sys/bc_desktop/klone/output/1ab44173-1dc5-4f1a-897f-f252cd0a9878/output.log",
+  "shell_path": "/bin/bash",
+  "wall_time": 3600,
+  "email_on_started": false,
+  "queue_name": "ckpt",
+  "accounting_id": "stf",
+  "native": [
+    "--ntasks",
+    "1",
+    "--cpus-per-task",
+    "1",
+    "--mem",
+    "1GB"
+  ]
+}

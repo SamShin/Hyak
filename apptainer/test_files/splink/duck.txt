@@ -1,5 +1,0 @@
-Sample Size: 2000|Links Predicted: 964|Time Taken: 31.38|Precision: 0.995850622406639|Recall: 0.96|Linkage Pairs: 2821760
-Sample Size: 10000|Links Predicted: 4982|Time Taken: 677.90|Precision: 0.9759132878362103|Recall: 0.9724|Linkage Pairs: 68949871
-Sample Size: 20000|Links Predicted: 10236|Time Taken: 2700.68|Precision: 0.9457796014067995|Recall: 0.9681|Linkage Pairs: 276265913
-Sample Size: 30000|Links Predicted: 16189|Time Taken: 6137.51|Precision: 0.8753474581505961|Recall: 0.9447333333333333|Linkage Pairs: 626844702
-Sample Size: 40000|Links Predicted: 23555|Time Taken: 10919.27|Precision: 0.8047548291233284|Recall: 0.9478|Linkage Pairs: 1111831767
